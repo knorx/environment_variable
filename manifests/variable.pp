@@ -6,18 +6,28 @@
 # @param value The value to set the variable to
 # @param ensure Whether to add or remove the variable
 define environment_variable::variable (
-  $value,
+  $value                            = undef,
   $variable                         = $title,
   Enum['present','absent'] $ensure  = present,
 ) {
+
+  # Attempt to parse variable name and value from title if it is in the form X=x
+  if $title =~ /.+=.+/ {
+    $split      = split($title, '=')
+    $_variable  = $split[0]
+    $_value     = $split[1]
+  } else {
+    $_variable  = $variable
+    $_value     = $value
+  }
 
   case $facts['kernel'] {
     "windows": {
       # progressively build up the path with seperate resources.  if the provider
       # doesn't allow this will have to rewrite to be a concat
-      windows_env { $variable:
+      windows_env { $_variable:
         ensure    => present,
-        value     => $value,
+        value     => $_value,
         mergemode => clobber,
       }
     }
@@ -28,12 +38,12 @@ define environment_variable::variable (
         default   => "absent",
       }
 
-      file { "/etc/profile.d/environment_variable__variable__${variable}.sh":
+      file { "/etc/profile.d/environment_variable__variable__${_variable}.sh":
         ensure  => $file_ensure,
         owner   => "root",
         group   => "root",
         mode    => "0644",
-        content => "export ${variable}=${value}",
+        content => "export ${_variable}=${_value}",
       }
     }
 
