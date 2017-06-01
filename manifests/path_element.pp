@@ -19,7 +19,7 @@ define environment_variable::path_element(
       windows_env { "path_element_${path}":
         ensure    => $ensure,
         variable  => 'PATH',
-        value     => $ruby_home,
+        value     => $path,
         mergemode => prepend,
       }
     }

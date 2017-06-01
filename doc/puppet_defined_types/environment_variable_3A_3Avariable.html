@@ -108,6 +108,8 @@
         <span class='type'>(<tt>Any</tt>)</span>
       
       
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
       
         &mdash;
         <div class='inline'>
@@ -180,24 +182,42 @@
 41
 42
 43
-44</pre>
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/variable.pp', line 8</span>
 
 define environment_variable::variable (
-  $value,
+  $value                            = undef,
   $variable                         = $title,
   Enum[&#39;present&#39;,&#39;absent&#39;] $ensure  = present,
 ) {
+
+  # Attempt to parse variable name and value from title if it is in the form X=x
+  if $title =~ /.+=.+/ {
+    $split      = split($title, &#39;=&#39;)
+    $_variable  = $split[0]
+    $_value     = $split[1]
+  } else {
+    $_variable  = $variable
+    $_value     = $value
+  }
 
   case $facts[&#39;kernel&#39;] {
     &quot;windows&quot;: {
       # progressively build up the path with seperate resources.  if the provider
       # doesn&#39;t allow this will have to rewrite to be a concat
-      windows_env { $variable:
+      windows_env { &quot;${_variable}=${_value}&quot;:
         ensure    =&gt; present,
-        value     =&gt; $value,
         mergemode =&gt; clobber,
       }
     }
@@ -208,12 +228,12 @@ define environment_variable::variable (
         default   =&gt; &quot;absent&quot;,
       }
 
-      file { &quot;/etc/profile.d/environment_variable__variable__${variable}.sh&quot;:
+      file { &quot;/etc/profile.d/environment_variable__variable__${_variable}.sh&quot;:
         ensure  =&gt; $file_ensure,
         owner   =&gt; &quot;root&quot;,
         group   =&gt; &quot;root&quot;,
         mode    =&gt; &quot;0644&quot;,
-        content =&gt; &quot;export ${variable}=${value}&quot;,
+        content =&gt; &quot;export ${_variable}=${_value}&quot;,
       }
     }
 

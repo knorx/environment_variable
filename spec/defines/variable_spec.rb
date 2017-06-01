@@ -15,7 +15,7 @@ describe 'environment_variable::variable' do
   # system_name = 'Debian-7.8-32'
   # system_name = 'Debian-7.8-64'
   # system_name = 'SLES-11.3-64'
-  system_name = 'SLES-12.1-64'
+  # system_name = 'SLES-12.1-64'
   # system_name = 'Ubuntu-12.04-32'
   # system_name = 'Ubuntu-12.04-64'
   # system_name = 'Ubuntu-14.04-32'
@@ -24,21 +24,25 @@ describe 'environment_variable::variable' do
   # system_name = 'Windows_Server-2012r2-64'
   # system_name = 'solaris-10_u9-sparc-64'
   # system_name = 'solaris-11.2-sparc-64'
-  let :facts do
-    PuppetFactset::factset_hash(system_name)
-  end
+  ['SLES-12.1-64', 'Windows_Server-2012r2-64'].each { |os|
+    context os do
+      let :facts do
+        PuppetFactset::factset_hash(os)
+      end
 
-  let :title do
-    "JAVA_HOME"
-  end
+      let :title do
+        "JAVA_HOME"
+      end
 
-  let :params do
-    {
-      :value => "/usr/local/java",
-    }
-  end
+      let :params do
+        {
+          :value => "/usr/local/java",
+        }
+      end
 
-  context 'compiles ok' do
-    it { should compile }
-  end
+      context 'compiles ok' do
+        it { should compile }
+      end
+    end
+  }
 end

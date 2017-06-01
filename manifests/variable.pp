@@ -25,9 +25,8 @@ define environment_variable::variable (
     "windows": {
       # progressively build up the path with seperate resources.  if the provider
       # doesn't allow this will have to rewrite to be a concat
-      windows_env { $_variable:
+      windows_env { "${_variable}=${_value}":
         ensure    => present,
-        value     => $_value,
         mergemode => clobber,
       }
     }

@@ -1,6 +1,6 @@
 {
   "name": "geoffwilliams-environment_variable",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "geoffwilliams",
   "summary": "Control windows and linux environment variables with puppet",
   "license": "Apache-2.0",

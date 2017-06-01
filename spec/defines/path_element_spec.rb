@@ -24,15 +24,19 @@ describe 'environment_variable::path_element' do
   # system_name = 'Windows_Server-2012r2-64'
   # system_name = 'solaris-10_u9-sparc-64'
   # system_name = 'solaris-11.2-sparc-64'
-  let :facts do
-    PuppetFactset::factset_hash(system_name)
-  end
+  ['SLES-12.1-64', 'Windows_Server-2012r2-64'].each { |os|
+    context os do
+      let :facts do
+        PuppetFactset::factset_hash(os)
+      end
 
-  let :title do
-    "/opt/ruby/bin"
-  end
+      let :title do
+        "/opt/ruby/bin"
+      end
 
-  context 'compiles ok' do
-    it { should compile }
-  end
+      context 'compiles ok' do
+        it { should compile }
+      end
+    end
+  }
 end
