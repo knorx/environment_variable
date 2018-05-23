@@ -1,6 +1,6 @@
 {
   "name": "geoffwilliams-environment_variable",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "geoffwilliams",
   "summary": "Control windows and linux environment variables with puppet",
   "license": "Apache-2.0",
@@ -9,7 +9,7 @@
   "issues_url": "https://github.com/GeoffWilliams/environment_variable/issues",
   "dependencies": [
     {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
-    {"name":"puppet-windows_env", "version_requirement":"2.3.0"}
+    {"name":"puppet-windows_env", "version_requirement":">= 2.3.0"}
   ],
   "data_provider": null
 }
