@@ -20,7 +20,7 @@ define environment_variable::path_element(
         ensure    => $ensure,
         variable  => 'PATH',
         value     => $path,
-        mergemode => prepend,
+        mergemode => insert,
       }
     }
 
