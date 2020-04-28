@@ -43,9 +43,13 @@ define environment_variable::path_element(
       }
     }
     'Darwin': {
-      exec {'Add $title to path':
-        command => "sed -i '' '1s;^;${path}\\'$'\\n;' /etc/paths",
-        unless  => "grep ${path} /etc/paths"
+      if $ensure == 'present' {
+        exec {'Add $title to path':
+          command => "sed -i '' '1s;^;${path}\\'$'\\n;' /etc/paths",
+          unless  => "grep ${path} /etc/paths"
+        }
+      } else {
+        fail('Not implemented for this OS.')
       }
     }
     default: {
