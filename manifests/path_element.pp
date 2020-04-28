@@ -42,7 +42,12 @@ define environment_variable::path_element(
         content => "PATH=${path}:\$PATH",
       }
     }
-
+    'Darwin': {
+      exec {'Add $title to path':
+        command => "sed -i '' '1s;^;${path}\\'$'\\n;' /etc/paths",
+        unless  => "grep ${path} /etc/paths"
+      }
+    }
     default: {
       fail("#{module_name} does not support ${facts['os']['family']}")
     }
